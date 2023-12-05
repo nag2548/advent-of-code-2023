@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-class ScratchcardsTests
+class Scratchcards2Tests
 {
 	@Test
 	void sample() throws URISyntaxException, IOException
@@ -21,10 +21,10 @@ class ScratchcardsTests
 		{
 			List<String> input = lines.toList();
 
-			Scratchcards app = new Scratchcards();
-			int sum = app.getPoints(input);
+			Scratchcards2 app = new Scratchcards2();
+			int sum = app.getNumberOfCards(input);
 
-			assertEquals(13, sum);
+			assertEquals(30, sum);
 		}
 	}
 
@@ -35,10 +35,10 @@ class ScratchcardsTests
 		{
 			List<String> input = lines.toList();
 
-			Scratchcards app = new Scratchcards();
-			int sum = app.getPoints(input);
+			Scratchcards2 app = new Scratchcards2();
+			int sum = app.getNumberOfCards(input);
 
-			assertEquals(24733, sum);
+			assertEquals(5422730, sum);
 		}
 	}
 }

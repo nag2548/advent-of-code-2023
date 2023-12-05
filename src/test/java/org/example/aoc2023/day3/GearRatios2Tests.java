@@ -17,7 +17,7 @@ class GearRatios2Tests
 	@Test
 	void sample() throws URISyntaxException, IOException
 	{
-		try (Stream<String> lines = Files.lines(Paths.get(getClass().getClassLoader().getResource("day3/sample2.txt").toURI()), StandardCharsets.UTF_8))
+		try (Stream<String> lines = Files.lines(Paths.get(getClass().getClassLoader().getResource("day3/sample.txt").toURI()), StandardCharsets.UTF_8))
 		{
 			List<String> input = lines.toList();
 
