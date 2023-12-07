@@ -1,14 +1,19 @@
 package org.example.aoc2023.day5;
 
+import static java.lang.Thread.MAX_PRIORITY;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class Fertilizer
+public class Fertilizer2
 {
 	private static final String SEED_TO_SOIL = "seed-to-soil map:";
 	private static final String SOIL_TO_FERTILIZER = "soil-to-fertilizer map:";
@@ -27,26 +32,48 @@ public class Fertilizer
 		TEMPERATURE_TO_HUMIDITY,
 		HUMIDITY_TO_LOCATION);
 
-	private List<Long> seeds;
+	private List<SeedRange> seeds = new ArrayList<>();
 	private Map<String, List<SourceTargetMapping>> mappingsMap = new HashMap<>();
 
-	public Fertilizer(List<String> input)
+	private ExecutorService executorService = Executors.newCachedThreadPool();
+
+	private Long lowestNumber = null;
+
+	public Fertilizer2(List<String> input)
 	{
 		initMap(input);
 	}
 
-	public Long getLowestLocation()
+	public Long getLowestLocation() throws InterruptedException
 	{
-		Long lowestNumber = null;
-		for (Long seed : seeds)
+		for (SeedRange seedRange : seeds)
 		{
-			Long newLocation = getLowestLocationSingle(seed);
+			System.out.println("seedRange: " + seedRange.start());
+
+			for (long i = seedRange.start(); i < seedRange.start() + seedRange.range(); i++)
+			{
+				Long currentSeed = i;
+				executorService.submit(() -> compute(currentSeed));
+			}
+
+			System.out.println("seedRange done: " + seedRange.start());
+		}
+		executorService.shutdown();
+		executorService.awaitTermination(MAX_PRIORITY, TimeUnit.HOURS);
+
+		return lowestNumber;
+	}
+
+	private void compute(Long seed)
+	{
+		Long newLocation = getLowestLocationSingle(seed);
+		synchronized (this)
+		{
 			if (lowestNumber == null || newLocation < lowestNumber)
 			{
 				lowestNumber = newLocation;
 			}
 		}
-		return lowestNumber;
 	}
 
 	private Long getLowestLocationSingle(Long seed)
@@ -73,9 +100,13 @@ public class Fertilizer
 		{
 			if (i == 0)
 			{
-				seeds = Arrays.stream(StringUtils.split(input.get(i).replace("seeds: ", ""), " "))
+				List<Long> longs = Arrays.stream(StringUtils.split(input.get(i).replace("seeds: ", ""), " "))
 					.map(Long::parseLong)
 					.toList();
+				for (int j = 0; j < longs.size(); j += 2)
+				{
+					seeds.add(new SeedRange(longs.get(j), longs.get(j + 1)));
+				}
 				continue;
 			}
 
