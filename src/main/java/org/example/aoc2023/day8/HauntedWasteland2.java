@@ -17,8 +17,6 @@ public class HauntedWasteland2
 {
 	private static final Pattern LINE_PATTERN = Pattern.compile("^(\\w+) = \\((\\w+), (\\w+)\\)$");
 
-	private static final String AAA = "AAA";
-	private static final String ZZZ = "ZZZ";
 	private static final char LEFT = 'L';
 
 	private final ExecutorService executorService = Executors.newFixedThreadPool(10);
