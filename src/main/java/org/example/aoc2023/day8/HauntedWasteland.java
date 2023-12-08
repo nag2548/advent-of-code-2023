@@ -54,7 +54,6 @@ public class HauntedWasteland
 			if (i == 0)
 			{
 				instructions = lines.get(i);
-				i++;
 			}
 
 			Matcher matcher = LINE_PATTERN.matcher(lines.get(i));

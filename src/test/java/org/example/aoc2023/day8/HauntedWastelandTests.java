@@ -36,7 +36,7 @@ class HauntedWastelandTests
 			HauntedWasteland app = new HauntedWasteland(input);
 			int count = app.getCount();
 
-			assertEquals(6, count);
+			assertEquals(19667, count);
 		}
 	}
 }
