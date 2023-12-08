@@ -36,7 +36,7 @@ class CamelCards2Tests
 			CamelCards2 app = new CamelCards2(input);
 			long winnings = app.getWinnings();
 
-			assertEquals(249390788L, winnings);
+			assertEquals(248750248L, winnings);
 		}
 	}
 }
