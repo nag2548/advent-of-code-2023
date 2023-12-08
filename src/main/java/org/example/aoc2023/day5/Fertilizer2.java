@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.LongStream;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -36,7 +37,7 @@ public class Fertilizer2
 	private final List<SeedRange> seeds = new ArrayList<>();
 	private final Map<String, List<SourceTargetMapping>> mappingsMap = new HashMap<>();
 
-	private final ExecutorService executorService = Executors.newCachedThreadPool();
+	private final ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
 	private Long lowestNumber = null;
 	private final AtomicLong counter = new AtomicLong(0);
@@ -48,30 +49,36 @@ public class Fertilizer2
 
 	public Long getLowestLocation() throws InterruptedException
 	{
-		for (SeedRange seedRange : seeds)
-		{
-			System.out.println("seedRange: " + seedRange.start());
+		seeds.stream()
+			.parallel()
+			.forEach(seedRange -> {
+				System.out.println("seedRange: " + seedRange.start());
+				computeRange(seedRange);
+				System.out.println("seedRange done: " + seedRange.start());
+			});
 
-			for (long i = seedRange.start(); i < seedRange.start() + seedRange.range(); i++)
-			{
-				Long currentSeed = i;
-				executorService.submit(() -> {
-					compute(currentSeed);
-					long processedSeeds = counter.incrementAndGet();
-
-					if (processedSeeds % 10000 == 0)
-					{
-						System.out.println(processedSeeds + " seeds processed");
-					}
-				});
-			}
-
-			System.out.println("seedRange done: " + seedRange.start());
-		}
 		executorService.shutdown();
 		executorService.awaitTermination(MAX_PRIORITY, TimeUnit.HOURS);
 
 		return lowestNumber;
+	}
+
+	private void computeRange(SeedRange seedRange)
+	{
+		LongStream.range(seedRange.start(), seedRange.start() + seedRange.range())
+			.parallel()
+			.forEach(i -> {
+				Long currentSeed = i;
+				executorService.execute(() -> {
+					compute(currentSeed);
+					long processedSeeds = counter.incrementAndGet();
+
+					if (processedSeeds % 10000000 == 0)
+					{
+						System.out.println(processedSeeds + " seeds processed");
+					}
+				});
+			});
 	}
 
 	private void compute(Long seed)
