@@ -83,10 +83,8 @@ public class Fertilizer
 			if (HEADER_NAMES.contains(line))
 			{
 				currentMap = line;
-				continue;
 			}
-
-			if (StringUtils.isNotBlank(line))
+			else if (StringUtils.isNotBlank(line))
 			{
 				List<Long> split = Arrays.stream(StringUtils.split(line, " "))
 					.map(Long::parseLong)

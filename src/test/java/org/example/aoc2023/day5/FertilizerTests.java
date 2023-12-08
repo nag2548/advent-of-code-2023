@@ -1,25 +1,23 @@
 package org.example.aoc2023.day5;
 
+import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
 class FertilizerTests
 {
 	@Test
-	void sample() throws URISyntaxException, IOException
+	void sample() throws IOException
 	{
-		try (Stream<String> lines = Files.lines(Paths.get(getClass().getClassLoader().getResource("day5/sample.txt").toURI()), StandardCharsets.UTF_8))
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(requireNonNull(getClass().getClassLoader().getResourceAsStream("day5/sample.txt")))))
 		{
-			List<String> input = lines.toList();
+			List<String> input = reader.lines().toList();
 
 			Fertilizer app = new Fertilizer(input);
 			Long lowestLocation = app.getLowestLocation();
@@ -29,11 +27,11 @@ class FertilizerTests
 	}
 
 	@Test
-	void real() throws URISyntaxException, IOException
+	void real() throws IOException
 	{
-		try (Stream<String> lines = Files.lines(Paths.get(getClass().getClassLoader().getResource("day5/input.txt").toURI()), StandardCharsets.UTF_8))
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(requireNonNull(getClass().getClassLoader().getResourceAsStream("day5/input.txt")))))
 		{
-			List<String> input = lines.toList();
+			List<String> input = reader.lines().toList();
 
 			Fertilizer app = new Fertilizer(input);
 			Long lowestLocation = app.getLowestLocation();
