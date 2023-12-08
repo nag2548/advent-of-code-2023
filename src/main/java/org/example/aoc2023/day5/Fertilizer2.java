@@ -39,7 +39,7 @@ public class Fertilizer2
 	private final ExecutorService executorService = Executors.newCachedThreadPool();
 
 	private Long lowestNumber = null;
-	private AtomicLong counter = new AtomicLong(0);
+	private final AtomicLong counter = new AtomicLong(0);
 
 	public Fertilizer2(List<String> input)
 	{
