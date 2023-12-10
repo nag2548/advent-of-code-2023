@@ -121,67 +121,32 @@ public class PipeMaze2
 		{
 			case VERTICAL_PIPE ->
 			{
-				yield isStart && a.coordinates().x() == b.coordinates().x()
-					|| a.type() == FieldType.VERTICAL_PIPE && a.coordinates().x() == b.coordinates().x()
-					|| fromBelow && a.type() == FieldType.L
-					|| fromBelow && a.type() == FieldType.J
-					|| fromAbove && a.type() == FieldType.SEVEN
-					|| fromAbove && a.type() == FieldType.F;
+				yield fromAbove && a.type().down || fromBelow && a.type().up;
 			}
 			case HORIZONTAL_PIPE ->
 			{
-				yield isStart && a.coordinates().y() == b.coordinates().y()
-					|| a.type() == FieldType.HORIZONTAL_PIPE && a.coordinates().y() == b.coordinates().y()
-					|| fromRight && a.type() == FieldType.SEVEN
-					|| fromRight && a.type() == FieldType.J
-					|| fromLeft && a.type() == FieldType.F
-					|| fromLeft && a.type() == FieldType.L;
+				yield fromLeft && a.type().right || fromRight && a.type().left;
 			}
 			case L ->
 			{
-				yield isStart && (fromAbove || fromRight)
-					|| fromAbove && a.type() == FieldType.VERTICAL_PIPE
-					|| fromRight && a.type() == FieldType.HORIZONTAL_PIPE
-					|| fromRight && a.type() == FieldType.J
-					|| (fromAbove || fromRight) && a.type() == FieldType.SEVEN
-					|| fromAbove && a.type() == FieldType.F;
+				yield fromAbove && a.type().down || fromRight && a.type().left;
 			}
 			case J ->
 			{
-				yield isStart && (fromAbove || fromLeft)
-					|| fromAbove && a.type() == FieldType.VERTICAL_PIPE
-					|| fromLeft && a.type() == FieldType.HORIZONTAL_PIPE
-					|| fromLeft && a.type() == FieldType.L
-					|| fromAbove && a.type() == FieldType.SEVEN
-					|| (fromAbove || fromLeft) && a.type() == FieldType.F;
+				yield fromAbove && a.type().down || fromLeft && a.type().right;
 			}
 			case SEVEN ->
 			{
-				yield isStart && (fromLeft || fromBelow)
-					|| fromBelow && a.type() == FieldType.VERTICAL_PIPE
-					|| fromLeft && a.type() == FieldType.HORIZONTAL_PIPE
-					|| (fromBelow || fromLeft) && a.type() == FieldType.L
-					|| fromBelow && a.type() == FieldType.J
-					|| fromLeft && a.type() == FieldType.F;
+				yield fromLeft && a.type().right || fromBelow && a.type().up;
 			}
 			case F ->
 			{
-				yield isStart && (fromBelow || fromRight)
-					|| fromBelow && a.type() == FieldType.VERTICAL_PIPE
-					|| fromRight && a.type() == FieldType.HORIZONTAL_PIPE
-					|| fromBelow && a.type() == FieldType.L
-					|| (fromBelow || fromRight) && a.type() == FieldType.J
-					|| fromRight && a.type() == FieldType.SEVEN;
+				yield fromBelow && a.type().up || fromRight && a.type().left;
 			}
 			case GROUND -> false;
 			case START ->
 			{
-				yield (fromAbove || fromBelow) && a.type() == FieldType.VERTICAL_PIPE
-					|| (fromLeft || fromRight) && a.type() == FieldType.HORIZONTAL_PIPE
-					|| (fromBelow || fromLeft) && a.type() == FieldType.L
-					|| (fromBelow && fromRight) && a.type() == FieldType.J
-					|| (fromRight || fromAbove) && a.type() == FieldType.SEVEN
-					|| (fromAbove || fromLeft) && a.type() == FieldType.F;
+				yield fromAbove && a.type().down || fromBelow && a.type().up || fromLeft && a.type().right || fromRight && a.type().left;
 			}
 		};
 	}
