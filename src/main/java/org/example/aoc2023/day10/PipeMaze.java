@@ -9,8 +9,7 @@ public class PipeMaze
 {
 	private final List<List<Field>> maze;
 
-	private List<Path> completedPaths = new ArrayList<>();
-	private List<Field> visited = new ArrayList<>();
+	private final List<Path> completedPaths = new ArrayList<>();
 
 	public PipeMaze(List<String> input)
 	{
