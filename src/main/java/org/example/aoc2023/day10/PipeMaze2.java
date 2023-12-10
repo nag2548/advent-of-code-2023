@@ -25,12 +25,10 @@ public class PipeMaze2
 
 		try (PrintWriter printWriter = new PrintWriter(new FileWriter(new File("/Users/ngr/pipes.txt"))))
 		{
-			for (int i = 0; i < maze.size(); i++)
+			for (List<Field> row : maze)
 			{
-				List<Field> row = maze.get(i);
-				for (int j = 0; j < row.size(); j++)
+				for (Field field : row)
 				{
-					Field field = row.get(j);
 					if (fields.contains(field))
 					{
 						printWriter.printf("%c", getPrintSymbol(field));
@@ -207,7 +205,8 @@ public class PipeMaze2
 	{
 		return switch (field.type())
 		{
-			case VERTICAL_PIPE, START -> 0x2502;
+			case VERTICAL_PIPE -> 0x2502;
+			case START -> 0x253C;
 			case HORIZONTAL_PIPE -> 0x2500;
 			case L -> 0x2514;
 			case J -> 0x2518;
