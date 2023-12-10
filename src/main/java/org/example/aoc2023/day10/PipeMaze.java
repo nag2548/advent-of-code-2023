@@ -1,6 +1,5 @@
 package org.example.aoc2023.day10;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -8,8 +7,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PipeMaze
 {
 	private final List<List<Field>> maze;
-
-	private final List<Path> completedPaths = new ArrayList<>();
 
 	public PipeMaze(List<String> input)
 	{
@@ -30,7 +27,7 @@ public class PipeMaze
 				.toList();
 		} while (paths.stream().noneMatch(c -> c.getField().type() == FieldType.START));
 
-		return completedPaths.stream()
+		return paths.stream()
 			.mapToInt(p -> (int)Math.ceil(p.getSteps() / 2.0))
 			.min()
 			.orElseThrow();
@@ -46,11 +43,6 @@ public class PipeMaze
 		if (parent.getParent() == null)
 		{
 			childPaths = List.of(childPaths.get(0));
-		}
-
-		if (childPaths.stream().anyMatch(c -> c.getField().type() == FieldType.START))
-		{
-			completedPaths.addAll(childPaths.stream().filter(c -> c.getField().type() == FieldType.START).toList());
 		}
 
 		return childPaths;
