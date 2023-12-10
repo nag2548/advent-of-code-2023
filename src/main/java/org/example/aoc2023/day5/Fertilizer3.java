@@ -55,8 +55,8 @@ public class Fertilizer3
 
 	private List<SeedRange2> computeRangeForSeeds(SeedRange2 starter)
 	{
-		List<SeedRange2> tmp = new ArrayList<>();
-		tmp.add(starter);
+		List<SeedRange2> seedRanges = new ArrayList<>();
+		seedRanges.add(starter);
 
 		int index = HEADER_NAMES.indexOf(starter.rangeType());
 		while (index + 1 < HEADER_NAMES.size())
@@ -64,16 +64,15 @@ public class Fertilizer3
 			RangeType nextRangeType = HEADER_NAMES.get(index + 1);
 			List<SourceTargetMapping2> nextMappings = mappingsMap.get(nextRangeType.heading);
 
-			List<SeedRange2> children = new ArrayList<>();
-			for (SeedRange2 seedRange : tmp)
-			{
-				children.addAll(getRanges(seedRange, nextMappings, nextRangeType));
-			}
-			tmp = children;
+			seedRanges = seedRanges.stream()
+				.map(seedRange -> getRanges(seedRange, nextMappings, nextRangeType))
+				.flatMap(Collection::stream)
+				.toList();
+
 			index++;
 		}
 
-		return tmp;
+		return seedRanges;
 	}
 
 	private List<SeedRange2> getRanges(SeedRange2 seedRange, List<SourceTargetMapping2> nextMappings, RangeType nextRangeType)
